@@ -67,6 +67,23 @@ const INITIAL_MENU = [
     ],
   },
   {
+    name: "Persediaan",
+    icon: {
+      class: "material-symbols-outlined",
+      text: "admin_panel_settings",
+    },
+    children: [
+      {
+        href: "/persediaan/warehouse",
+        name: "Warehouse",
+      },
+      {
+        href: "/persediaan/satuan",
+        name: "Satuan",
+      },
+    ],
+  },
+  {
     name: "Admin",
     icon: {
       class: "material-symbols-outlined",
