@@ -76,15 +76,14 @@
           row-key="_id"
           selection="multiple"
         >
-          <template #body-cell-name="props">
+          <template #body-cell-telpon="props">
             <q-td :props="props">
-              <a
-                class="text-link"
-                href="javascript:void(0)"
-                @click="onRowClick(props.row)"
-              >
-                {{ props.value }}
-              </a>
+              <span v-if="props.row.telpon != ''" style="display: block">
+                Telpon: {{ props.row.telpon }}
+              </span>
+              <span v-if="props.row.hp != ''" style="display: block">
+                HP: {{ props.row.hp }}
+              </span>
             </q-td>
           </template>
         </q-table>
@@ -94,21 +93,33 @@
 </template>
 
 <script setup>
+import { useStore } from "vuex";
+
 const router = useRouter();
+const store = useStore();
 const columns = ref([
-  { name: "role", label: "STATUS", field: "role" },
-  { name: "name", label: "VENDOR CODE", field: "name", sortable: true },
-  { name: "email", label: "VENDOR NAME", field: "email", sortable: true },
-  { name: "role", label: "PHONE", field: "role" },
-  { name: "role", label: "EMAIL", field: "role" },
-  { name: "role", label: "ADDRESS", field: "role" },
+  { name: "code", label: "VENDOR CODE", field: "code" },
+  { name: "email", label: "VENDOR NAME", field: "email" },
+  { name: "telpon", label: "PHONE", field: "telpon" },
+  { name: "email", label: "EMAIL", field: "email" },
+  { name: "alamat", label: "ADDRESS", field: "alamat" },
 ]);
-const rows = ref([]);
+const rows = computed(() => store.getters["vendor/getListVendor"]);
+
 const selected = ref([]);
-const onLoadData = () => {};
+
+const onLoadData = () => {
+  store.dispatch("vendor/fetchListVendor");
+};
+
 const onCreateData = () => {
+  store.commit("vendor/clearVendorForm");
   router.push("/purchasing/vendor/form-input");
 };
 const onEditItem = () => {};
 const onDelete = () => {};
+
+onNuxtReady(() => {
+  onLoadData();
+});
 </script>
