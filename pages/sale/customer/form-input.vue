@@ -40,7 +40,14 @@
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <span class="custom-input">
-                  <q-input outlined dense hide-bottom-space requird />
+                  <q-input
+                    :model-value="customer.code"
+                    outlined
+                    dense
+                    hide-bottom-space
+                    requird
+                    @update:model-value="(val) => (customer = { code: val })"
+                  />
                 </span>
               </div>
             </div>
@@ -53,7 +60,14 @@
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <span class="custom-input">
-                  <q-input outlined dense hide-bottom-space requird />
+                  <q-input
+                    outlined
+                    dense
+                    hide-bottom-space
+                    requird
+                    :model-value="customer.name"
+                    @update:model-value="(val) => (customer = { name: val })"
+                  />
                 </span>
               </div>
             </div>
@@ -62,11 +76,40 @@
               <div
                 class="text-right q-pr-md col-lg-3 col-md-3 col-sm-3 col-xs-12"
               >
-                <label class="text-bold">Phone</label>
+                <label class="text-bold">Handphone</label>
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <span class="custom-input">
-                  <q-input outlined dense hide-bottom-space requird />
+                  <q-input
+                    outlined
+                    dense
+                    hide-bottom-space
+                    requird
+                    :model-value="customer.handphone"
+                    @update:model-value="
+                      (val) => (customer = { handphone: val })
+                    "
+                  />
+                </span>
+              </div>
+            </div>
+
+            <div class="row q-mb-sm items-center">
+              <div
+                class="text-right q-pr-md col-lg-3 col-md-3 col-sm-3 col-xs-12"
+              >
+                <label class="text-bold">Telpon</label>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <span class="custom-input">
+                  <q-input
+                    outlined
+                    dense
+                    hide-bottom-space
+                    requird
+                    :model-value="customer.telpone"
+                    @update:model-value="(val) => (customer = { telpone: val })"
+                  />
                 </span>
               </div>
             </div>
@@ -79,7 +122,14 @@
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <span class="custom-input">
-                  <q-input outlined dense hide-bottom-space requird />
+                  <q-input
+                    outlined
+                    dense
+                    hide-bottom-space
+                    requird
+                    :model-value="customer.email"
+                    @update:model-value="(val) => (customer = { email: val })"
+                  />
                 </span>
               </div>
             </div>
@@ -92,7 +142,14 @@
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <span class="custom-input">
-                  <q-input outlined dense hide-bottom-space requird />
+                  <q-input
+                    outlined
+                    dense
+                    hide-bottom-space
+                    requird
+                    :model-value="customer.addres"
+                    @update:model-value="(val) => (customer = { addres: val })"
+                  />
                 </span>
               </div>
             </div>
@@ -127,12 +184,30 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useStore } from "vuex";
+
 const router = useRouter();
+const store = useStore();
+
+const customer = computed({
+  get() {
+    return store.getters["customer/getCustomer"];
+  },
+  set(value) {
+    store.commit("customer/setCustomer", value);
+  },
+});
 
 const onBack = () => {
   router.go(-1);
 };
-const onSubmit = () => {};
-const onReset = () => {};
+
+const onSubmit = async () => {
+  await store.dispatch("customer/submitCustomer", { router });
+};
+
+const onReset = () => {
+  store.commit("customer/resetCustomer");
+};
 </script>

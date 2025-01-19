@@ -94,7 +94,9 @@
 </template>
 
 <script setup>
+import { useStore } from "vuex";
 const router = useRouter();
+const store = useStore();
 const columns = ref([
   { name: "role", label: "STATUS", field: "role" },
   { name: "name", label: "CUSTOMER CODE", field: "name", sortable: true },
@@ -103,12 +105,18 @@ const columns = ref([
   { name: "role", label: "EMAIL", field: "role" },
   { name: "role", label: "ADDRESS", field: "role" },
 ]);
-const rows = ref([]);
+const rows = computed(() => store.getters["customer/getCustomerList"]);
 const selected = ref([]);
-const onLoadData = () => {};
+const onLoadData = async () => {
+  await store.dispatch("customer/getCustomerList");
+};
 const onCreateData = () => {
   router.push("/sale/customer/form-input");
 };
 const onEditItem = () => {};
 const onDelete = () => {};
+
+onNuxtReady(()=>{
+  onLoadData()
+})
 </script>
