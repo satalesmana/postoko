@@ -85,6 +85,10 @@ const INITIAL_MENU = [
         href: "/persediaan/kategori-produk",
         name: "Kategori Produk",
       },
+      {
+        href: "/persediaan/produk",
+        name: "Produk",
+      },
     ],
   },
   {
