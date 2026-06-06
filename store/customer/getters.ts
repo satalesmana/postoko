@@ -5,3 +5,7 @@ export const getCustomer = (state: any) => {
 export const getCustomerList = (state: any) => {
   return state.data.table;
 };
+
+export const getMetaCustomerList = (state: any) => {
+  return state.data.meta;
+};

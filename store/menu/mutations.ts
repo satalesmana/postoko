@@ -81,6 +81,10 @@ const INITIAL_MENU = [
         href: "/persediaan/satuan",
         name: "Satuan",
       },
+      {
+        href: "/persediaan/kategori-produk",
+        name: "Kategori Produk",
+      },
     ],
   },
   {
@@ -102,8 +106,8 @@ const INITIAL_MENU = [
   },
 ];
 
-export async function setUserMenu(state, payload) {
-  const checkPermissions = (href) => {
+export async function setUserMenu(state, payload: any) {
+  const checkPermissions = (href:string) => {
     const item = payload.permissions.find((permit) => permit.href === href);
     return Boolean(item);
   };
@@ -113,7 +117,7 @@ export async function setUserMenu(state, payload) {
       return menu;
     }
 
-    if (menu?.children.length > 0) {
+    if (menu?.children &&menu?.children.length > 0) {
       const children = menu.children.filter((child) => {
         if (checkPermissions(child.href)) return child;
       });

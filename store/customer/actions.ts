@@ -30,10 +30,17 @@ export async function submitCustomer(
   }
 }
 
-export async function getCustomerList({ commit }: any) {
+export async function getCustomerList({ commit, getters }: any) {
   try {
     Loading.show();
-    const { data, error } = await useFetch("/api/customer");
+    const { current_page, per_page } = getters.getMetaCustomerList;
+    const filter = {
+      filter: null,
+      current_page,
+      per_page,
+    };
+
+    const { data, error } = await useFetch("/api/customer", { query: filter });
 
     if (error.value) {
       throw error;

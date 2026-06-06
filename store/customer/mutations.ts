@@ -16,5 +16,9 @@ export function resetCustomer(state: any) {
 
 export function setData(state: any, payload: Array<any>) {
   state.data.table = payload.data;
-  state.data.meta = payload.meta;
+  state.data.meta = { ...state.data.meta, ...payload.meta };
+}
+
+export function setMetaData(state: any, payload: any) {
+  state.data.meta = { ...state.data.meta, ...payload.meta };
 }

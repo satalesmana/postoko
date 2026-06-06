@@ -3,14 +3,22 @@ import type { ApiResponse } from "~/server/types/apiresponse.interface";
 
 export default defineEventHandler(async (event) => {
   try {
-    const res = await getQuery(Customer, {});
+    const query = getQuery(event);
+    const per_page = query?.per_page || 0;
+    const current_page = query?.current_page || 0;
+
+    const filterQuery = {
+      filter: query?.filter || null,
+      limit: query.per_page,
+      skiped: parseInt(per_page) * (parseInt(current_page) - 1),
+    };
+
+    console.log("filterQuery", filterQuery);
+    const { data, meta } = await getQueryMongodb(Customer, filterQuery);
 
     return {
-      data: res.data,
-      meta: {
-        total: res.total,
-        per_page: res.per_page,
-      },
+      data,
+      meta,
       message: "",
     } as ApiResponse<[], string>;
   } catch (error) {

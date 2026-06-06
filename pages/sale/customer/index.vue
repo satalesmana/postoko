@@ -24,13 +24,13 @@
 
             <div class="q-gutter-sm">
               <q-btn
-                @click="onCreateData"
                 outline
                 flat
                 round
                 color="secondary"
                 size="sm"
                 icon="add"
+                @click="onCreateData"
               >
                 <q-tooltip> Create New Item </q-tooltip>
               </q-btn>
@@ -63,60 +63,29 @@
         </q-item-section>
       </q-item>
 
-      <q-separator />
+      <ClientOnly>
+        <module-sale-customer-list-data ref="tblCustomerRef" />
+      </ClientOnly>
 
-      <q-card-section>
-        <q-table
-          v-model:selected="selected"
-          class="my-table"
-          flat
-          bordered
-          :rows="rows"
-          :columns="columns"
-          row-key="_id"
-          selection="multiple"
-        >
-          <template #body-cell-name="props">
-            <q-td :props="props">
-              <a
-                class="text-link"
-                href="javascript:void(0)"
-                @click="onRowClick(props.row)"
-              >
-                {{ props.value }}
-              </a>
-            </q-td>
-          </template>
-        </q-table>
-      </q-card-section>
+      <q-separator />
     </q-card>
   </div>
 </template>
 
 <script setup>
-import { useStore } from "vuex";
+const tblCustomerRef = ref(null);
 const router = useRouter();
-const store = useStore();
-const columns = ref([
-  { name: "role", label: "STATUS", field: "role" },
-  { name: "name", label: "CUSTOMER CODE", field: "name", sortable: true },
-  { name: "email", label: "CUSTOMER NAME", field: "email", sortable: true },
-  { name: "role", label: "PHONE", field: "role" },
-  { name: "role", label: "EMAIL", field: "role" },
-  { name: "role", label: "ADDRESS", field: "role" },
-]);
-const rows = computed(() => store.getters["customer/getCustomerList"]);
-const selected = ref([]);
-const onLoadData = async () => {
-  await store.dispatch("customer/getCustomerList");
-};
+
 const onCreateData = () => {
   router.push("/sale/customer/form-input");
 };
+
+const onLoadData = () => {
+  tblCustomerRef.value.onRequest({
+    pagination: { page: 1, rowsPerPage: 10 },
+  });
+};
+
 const onEditItem = () => {};
 const onDelete = () => {};
-
-onNuxtReady(()=>{
-  onLoadData()
-})
 </script>

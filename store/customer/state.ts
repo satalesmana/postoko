@@ -10,7 +10,12 @@ export default function (): any {
     },
     data: {
       table: [],
-      meta: {},
+      meta: {
+        total_data: 0,
+        per_page: 10,
+        current_page: 1,
+        total_page: 1,
+      },
     },
   };
 }
