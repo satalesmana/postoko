@@ -1,6 +1,6 @@
 <template>
   <div class="q-ma-lg">
-    <CustomeTitle icon="font_download" label="Add New Satuan" />
+    <CustomeTitle icon="font_download" :label="isEdit ? 'Edit Satuan' : 'Add New Satuan'" />
     <q-card flat bordered class="q-mt-lg">
       <q-item class="bg-grey-4">
         <q-item-section>
@@ -19,7 +19,7 @@
 
             <q-separator vertical class="q-ml-md q-mr-md" />
 
-            <span class="text-bold">Satuan Form </span>
+            <span class="text-bold">{{ isEdit ? 'Edit Satuan' : 'Satuan Form' }}</span>
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -27,7 +27,7 @@
       <q-card-section>
         <ClientOnly fallback-tag="span" fallback="Loading component...">
           <q-form
-            ref="formInputActivityRef"
+            ref="formRef"
             class="q-gutter-md"
             @submit="onSubmit"
             @reset="onReset"
@@ -36,11 +36,18 @@
               <div
                 class="text-right q-pr-md col-lg-3 col-md-3 col-sm-3 col-xs-12"
               >
-                <label class="text-bold">Satuan Code </label>
+                <label class="text-bold">Satuan Code <span class="text-red">*</span></label>
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <span class="custom-input">
-                  <q-input outlined dense hide-bottom-space requird />
+                  <q-input
+                    v-model="formCode"
+                    outlined
+                    dense
+                    hide-bottom-space
+                    :rules="[(v) => !!v || 'Kode satuan wajib diisi']"
+                    placeholder="Contoh: PCS"
+                  />
                 </span>
               </div>
             </div>
@@ -49,11 +56,18 @@
               <div
                 class="text-right q-pr-md col-lg-3 col-md-3 col-sm-3 col-xs-12"
               >
-                <label class="text-bold">Satuan Name </label>
+                <label class="text-bold">Satuan Name <span class="text-red">*</span></label>
               </div>
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <span class="custom-input">
-                  <q-input outlined dense hide-bottom-space requird />
+                  <q-input
+                    v-model="formName"
+                    outlined
+                    dense
+                    hide-bottom-space
+                    :rules="[(v) => !!v || 'Nama satuan wajib diisi']"
+                    placeholder="Nama satuan"
+                  />
                 </span>
               </div>
             </div>
@@ -76,7 +90,7 @@
                     unelevated
                     color="negative"
                     label="Cancel"
-                    @click="onReset"
+                    @click="onBack"
                   />
                 </div>
               </div>
@@ -89,12 +103,50 @@
 </template>
 
 <script lang="ts" setup>
+import { useStore } from "vuex";
+
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const router = useRouter();
+const route = useRoute();
+const store = useStore();
+const formRef = ref<{ resetValidation: () => void } | null>(null);
+
+const formCode = computed({
+  get: () => store.getters["satuan/getFormInput"].code,
+  set: (val: string) => store.commit("satuan/setSatuanForm", { code: val }),
+});
+
+const formName = computed({
+  get: () => store.getters["satuan/getFormInput"].name,
+  set: (val: string) => store.commit("satuan/setSatuanForm", { name: val }),
+});
 
 const onBack = () => {
   router.push("/persediaan/satuan");
 };
 
-const onSubmit = () => {};
-const onReset = () => {};
+const onSubmit = () => {
+  if (props.isEdit) {
+    store.dispatch("satuan/updateData");
+  } else {
+    store.dispatch("satuan/submitData");
+  }
+};
+
+const onReset = () => {
+  store.commit("satuan/clearSatuanForm");
+  formRef.value?.resetValidation();
+};
+
+onNuxtReady(() => {
+  if (props.isEdit && route.params.id) {
+    store.dispatch("satuan/fetchSatuanById", route.params.id);
+  }
+});
 </script>

@@ -109,16 +109,16 @@ const props = defineProps({
 const router = useRouter();
 const route = useRoute();
 const store = useStore();
-const formRef = ref(null);
+const formRef = ref<{ resetValidation: () => void } | null>(null);
 
 const formCode = computed({
   get: () => store.getters["kategoriProduk/getFormInput"].code,
-  set: (val) => store.commit("kategoriProduk/setKategoriProdukForm", { code: val }),
+  set: (val: string) => store.commit("kategoriProduk/setKategoriProdukForm", { code: val }),
 });
 
 const formName = computed({
   get: () => store.getters["kategoriProduk/getFormInput"].name,
-  set: (val) => store.commit("kategoriProduk/setKategoriProdukForm", { name: val }),
+  set: (val: string) => store.commit("kategoriProduk/setKategoriProdukForm", { name: val }),
 });
 
 const onBack = () => {

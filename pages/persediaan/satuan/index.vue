@@ -75,38 +75,57 @@
           :columns="columns"
           row-key="_id"
           selection="multiple"
-        >
-          <template #body-cell-name="props">
-            <q-td :props="props">
-              <a
-                class="text-link"
-                href="javascript:void(0)"
-                @click="onRowClick(props.row)"
-              >
-                {{ props.value }}
-              </a>
-            </q-td>
-          </template>
-        </q-table>
+        />
       </q-card-section>
     </q-card>
   </div>
 </template>
 
 <script setup>
+import { useStore } from "vuex";
+
 const router = useRouter();
+const store = useStore();
+
 const columns = ref([
-  { name: "role", label: "SATUAN CODE", field: "role" },
-  { name: "email", label: "SATUAN NAME", field: "email" },
+  { name: "code", label: "SATUAN CODE", field: "code", align: "left" },
+  { name: "name", label: "SATUAN NAME", field: "name", align: "left" },
 ]);
-const rows = ref([]);
+
+const rows = computed(() => store.getters["satuan/getListSatuan"]);
 const selected = ref([]);
-const onLoadData = () => {};
+
+const onLoadData = () => {
+  store.dispatch("satuan/fetchListSatuan");
+};
+
 const onCreateData = () => {
+  store.commit("satuan/clearSatuanForm");
   router.push("/persediaan/satuan/add");
 };
+
 const onEditItem = () => {
-  router.push("/persediaan/satuan/edit/23");
+  if (selected.value.length !== 1) {
+    showNotify({ name: "Edit", type: "Warning", error: "Pilih satu item untuk diedit" });
+    return;
+  }
+  const item = selected.value[0];
+  store.commit("satuan/setSatuanForm", item);
+  router.push(`/persediaan/satuan/edit/${item._id}`);
 };
-const onDelete = () => {};
+
+const onDelete = () => {
+  if (selected.value.length === 0) {
+    showNotify({ name: "Delete", type: "Warning", error: "Pilih item yang akan dihapus" });
+    return;
+  }
+  const ids = selected.value.map((item) => item._id);
+  store.dispatch("satuan/deleteData", ids).then(() => {
+    selected.value = [];
+  });
+};
+
+onNuxtReady(() => {
+  onLoadData();
+});
 </script>

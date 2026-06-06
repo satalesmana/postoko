@@ -1,0 +1,12 @@
+import { Satuan } from "~/server/models/Satuan.model";
+import type { ApiResponse } from "~/server/types/apiresponse.interface";
+
+export default defineEventHandler(async (event) => {
+  try {
+    const res = await Satuan.find();
+
+    return { data: res, message: "" } as ApiResponse<[], string>;
+  } catch (error) {
+    return error as ApiResponse<[], string>;
+  }
+});
