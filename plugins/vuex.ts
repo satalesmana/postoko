@@ -13,6 +13,7 @@ import customer from "~/store/customer";
 import kategoriProduk from "~/store/kategori-produk";
 import satuan from "~/store/satuan";
 import produk from "~/store/produk";
+import stockBarang from "~/store/stock-barang";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuexCookie = new VuexPersistence<State, Payload>({
@@ -49,6 +50,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       kategoriProduk,
       satuan,
       produk,
+      stockBarang,
     },
     mutations: {
       RESTORE_MUTATION: vuexCookie.RESTORE_MUTATION, // this mutation **MUST** be named "RESTORE_MUTATION"
