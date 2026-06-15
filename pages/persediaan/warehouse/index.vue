@@ -66,28 +66,30 @@
       <q-separator />
 
       <q-card-section>
-        <q-table
-          v-model:selected="selected"
-          class="my-table"
-          flat
-          bordered
-          :rows="rows"
-          :columns="columns"
-          row-key="_id"
-          selection="multiple"
-        >
-          <template #body-cell-name="props">
-            <q-td :props="props">
-              <a
-                class="text-link"
-                href="javascript:void(0)"
-                @click="onRowClick(props.row)"
-              >
-                {{ props.value }}
-              </a>
-            </q-td>
-          </template>
-        </q-table>
+        <ClientOnly fallback-tag="span" fallback="Loading component...">
+          <q-table
+            v-model:selected="selected"
+            class="my-table"
+            flat
+            bordered
+            :rows="rows"
+            :columns="columns"
+            row-key="_id"
+            selection="multiple"
+          >
+            <template #body-cell-name="props">
+              <q-td :props="props">
+                <a
+                  class="text-link"
+                  href="javascript:void(0)"
+                  @click="onRowClick(props.row)"
+                >
+                  {{ props.value }}
+                </a>
+              </q-td>
+            </template>
+          </q-table>
+        </ClientOnly>
       </q-card-section>
     </q-card>
   </div>

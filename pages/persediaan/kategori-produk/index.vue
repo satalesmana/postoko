@@ -66,16 +66,18 @@
       <q-separator />
 
       <q-card-section>
-        <q-table
-          v-model:selected="selected"
-          class="my-table"
-          flat
-          bordered
-          :rows="rows"
-          :columns="columns"
-          row-key="_id"
-          selection="multiple"
-        />
+        <ClientOnly fallback-tag="span" fallback="Loading component...">
+          <q-table
+            v-model:selected="selected"
+            class="my-table"
+            flat
+            bordered
+            :rows="rows"
+            :columns="columns"
+            row-key="_id"
+            selection="multiple"
+          />
+        </ClientOnly>
       </q-card-section>
     </q-card>
   </div>
@@ -92,7 +94,9 @@ const columns = ref([
   { name: "name", label: "NAMA KATEGORI", field: "name", align: "left" },
 ]);
 
-const rows = computed(() => store.getters["kategoriProduk/getListKategoriProduk"]);
+const rows = computed(
+  () => store.getters["kategoriProduk/getListKategoriProduk"],
+);
 const selected = ref([]);
 
 const onLoadData = () => {
@@ -106,7 +110,11 @@ const onCreateData = () => {
 
 const onEditItem = () => {
   if (selected.value.length !== 1) {
-    showNotify({ name: "Edit", type: "Warning", error: "Pilih satu item untuk diedit" });
+    showNotify({
+      name: "Edit",
+      type: "Warning",
+      error: "Pilih satu item untuk diedit",
+    });
     return;
   }
   const item = selected.value[0];
@@ -116,7 +124,11 @@ const onEditItem = () => {
 
 const onDelete = () => {
   if (selected.value.length === 0) {
-    showNotify({ name: "Delete", type: "Warning", error: "Pilih item yang akan dihapus" });
+    showNotify({
+      name: "Delete",
+      type: "Warning",
+      error: "Pilih item yang akan dihapus",
+    });
     return;
   }
   const ids = selected.value.map((item) => item._id);

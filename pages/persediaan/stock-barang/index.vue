@@ -66,16 +66,18 @@
       <q-separator />
 
       <q-card-section>
-        <q-table
-          v-model:selected="selected"
-          class="my-table"
-          flat
-          bordered
-          :rows="rows"
-          :columns="columns"
-          row-key="_id"
-          selection="multiple"
-        />
+        <ClientOnly fallback-tag="span" fallback="Loading component...">
+          <q-table
+            v-model:selected="selected"
+            class="my-table"
+            flat
+            bordered
+            :rows="rows"
+            :columns="columns"
+            row-key="_id"
+            selection="multiple"
+          />
+        </ClientOnly>
       </q-card-section>
     </q-card>
   </div>
