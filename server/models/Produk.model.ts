@@ -1,9 +1,10 @@
 import { Schema, model } from "mongoose";
+import { KategoriProduk } from "./KategoriProduk.model"
 
 export const ProdukSchema = new Schema({
   code_produk: { type: String },
   name: { type: String },
-  kategori: { type: Schema.Types.ObjectId, ref: "KategoriProduk" },
+  kategori: { type: Schema.Types.ObjectId, ref: KategoriProduk },
   merek: { type: String },
 });
 
