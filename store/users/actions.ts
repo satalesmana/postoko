@@ -57,7 +57,7 @@ export async function submitUser({ commit, getters }: any, { router }: any) {
 
     const body = getters.getUser;
     const { data, error } = await useFetch("/api/user", {
-      method: "POST",
+      method: body._id ? "PUT" : "POST",
       body,
     });
 
