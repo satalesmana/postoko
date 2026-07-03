@@ -116,10 +116,27 @@ const onLoadData = () => {
 
 const onCreateData = () => {
   store.commit("vendor/clearVendorForm");
-  router.push("/purchasing/vendor/form-input");
+  router.push("/purchasing/vendor/add");
 };
-const onEditItem = () => {};
-const onDelete = () => {};
+
+const onEditItem = () => {
+  router.push(`/purchasing/vendor/edit/${selected.value[0]._id}`);
+};
+const onDelete = () => {
+  if (selected.value.length === 0) {
+    return;
+  }
+
+  Dialog.create({
+    title: "Delete Vendor",
+    message: `Are you sure want to delete ${selected.value[0].name}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    await store.dispatch("vendor/deleteData", selected.value);
+    onLoadData();
+  });
+};
 
 onNuxtReady(() => {
   onLoadData();

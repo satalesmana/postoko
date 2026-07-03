@@ -3,6 +3,7 @@ import type { VendorState } from "./interface";
 export default function (): VendorState {
   return {
     formInput: {
+      _id: null,
       alamat: "",
       bankAccount: "",
       code: "",

@@ -9,6 +9,7 @@ export interface BankAccount {
   value: string;
 }
 export interface Vendor {
+  _id?: string | null;
   code: string;
   name: string;
   hp: string;
