@@ -66,49 +66,89 @@
       <q-separator />
 
       <q-card-section>
-        <q-table
-          v-model:selected="selected"
-          class="my-table"
-          flat
-          bordered
-          :rows="rows"
-          :columns="columns"
-          row-key="_id"
-          selection="multiple"
-        >
-          <template #body-cell-name="props">
-            <q-td :props="props">
-              <a
-                class="text-link"
-                href="javascript:void(0)"
-                @click="onRowClick(props.row)"
-              >
-                {{ props.value }}
-              </a>
-            </q-td>
-          </template>
-        </q-table>
+        <client-only>
+          <q-table
+            v-model:selected="selected"
+            class="my-table"
+            flat
+            bordered
+            :rows="rows"
+            :columns="columns"
+            row-key="_id"
+            selection="multiple"
+          >
+            <template #body-cell-no_urut="props">
+              <q-td :props="props">
+                {{ props.rowIndex + 1 }}
+              </q-td>
+            </template>
+          </q-table>
+        </client-only>
       </q-card-section>
     </q-card>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useStore } from "vuex";
+
 const router = useRouter();
+const store = useStore();
 const columns = ref([
-  { name: "role", label: "STATUS", field: "role" },
-  { name: "name", label: "VENDOR CODE", field: "name", sortable: true },
-  { name: "email", label: "VENDOR NAME", field: "email", sortable: true },
-  { name: "role", label: "PHONE", field: "role" },
-  { name: "role", label: "EMAIL", field: "role" },
-  { name: "role", label: "ADDRESS", field: "role" },
+  { name: "status", label: "STATUS", field: "status", align: "left" },
+  { name: "no_urut", label: "NO", field: "no_urut", align: "left" },
+  {
+    name: "no",
+    label: "PESANAN NO",
+    field: "no",
+    sortable: true,
+    align: "left",
+  },
+  { name: "keterangan", label: "NAMA", field: "keterangan", align: "left" },
+  {
+    name: "vendorCode",
+    label: "KODE VENDOR",
+    field: (row) => row.vendor?.code ?? "-",
+    align: "left",
+  },
+  {
+    name: "vendorName",
+    label: "NAMA VENDOR",
+    field: (row) => row.vendor?.name ?? "-",
+    sortable: true,
+    align: "left",
+  },
+  { name: "discount", label: "DISCOUNT", field: "discount", align: "left" },
+  {
+    name: "tanggal",
+    label: "PESANAN DATE",
+    field: (row) =>
+      row.tanggal
+        ? new Date(row.tanggal).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })
+        : "-",
+    align: "left",
+  },
 ]);
-const rows = ref([]);
+const rows = computed(
+  () => store.getters["purchaseOrder/getListPurchaseOrder"],
+);
 const selected = ref([]);
-const onLoadData = () => {};
+const onLoadData = () => {
+  store.dispatch("purchaseOrder/fetchListPurchaseOrder");
+};
 const onCreateData = () => {
+  store.commit("purchaseOrder/clearPurchaseOrderForm");
+  store.commit("purchaseOrder/clearListPurchaseOrder");
   router.push("/purchasing/order/add");
 };
 const onEditItem = () => {};
 const onDelete = () => {};
+
+onNuxtReady(() => {
+  onLoadData();
+});
 </script>
