@@ -178,7 +178,7 @@ const vendor = computed({
 
 const onSubmit = () => {
   if (props.formMode === "add") {
-    store.dispatch("vendor/addData");
+    store.dispatch("vendor/submitData");
   } else if (props.formMode === "edit") {
     store.dispatch("vendor/updateData");
   }

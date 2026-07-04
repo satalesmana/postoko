@@ -76,13 +76,7 @@
             :columns="columns"
             row-key="_id"
             selection="multiple"
-          >
-            <template #body-cell-no_urut="props">
-              <q-td :props="props">
-                {{ props.rowIndex + 1 }}
-              </q-td>
-            </template>
-          </q-table>
+          />
         </client-only>
       </q-card-section>
     </q-card>
@@ -96,7 +90,6 @@ const router = useRouter();
 const store = useStore();
 const columns = ref([
   { name: "status", label: "STATUS", field: "status", align: "left" },
-  { name: "no_urut", label: "NO", field: "no_urut", align: "left" },
   {
     name: "no",
     label: "PESANAN NO",
@@ -104,7 +97,6 @@ const columns = ref([
     sortable: true,
     align: "left",
   },
-  { name: "keterangan", label: "NAMA", field: "keterangan", align: "left" },
   {
     name: "vendorCode",
     label: "KODE VENDOR",
@@ -132,6 +124,12 @@ const columns = ref([
         : "-",
     align: "left",
   },
+  {
+    name: "keterangan",
+    label: "KETERANGAN",
+    field: "keterangan",
+    align: "left",
+  },
 ]);
 const rows = computed(
   () => store.getters["purchaseOrder/getListPurchaseOrder"],
@@ -145,7 +143,26 @@ const onCreateData = () => {
   store.commit("purchaseOrder/clearListPurchaseOrder");
   router.push("/purchasing/order/add");
 };
-const onEditItem = () => {};
+const onEditItem = () => {
+  if (selected.value.length === 0) {
+    Notify.create({
+      message: "Please select an item to edit.",
+      color: "warning",
+      position: "top",
+    });
+    return;
+  }
+  if (selected.value.length > 1) {
+    Notify.create({
+      message: "Please select only one item to edit.",
+      color: "warning",
+      position: "top",
+    });
+    return;
+  }
+  const selectedItem = selected.value[0];
+  router.push(`/purchasing/order/edit/${selectedItem._id}`);
+};
 const onDelete = () => {};
 
 onNuxtReady(() => {

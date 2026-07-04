@@ -1,5 +1,5 @@
 import { Loading, Dialog } from "quasar";
-import type { PurchaseOrder } from "./interface";
+import type { PurchaseOrder, PurchaseOrderLine } from "./interface";
 
 export async function fetchListPurchaseOrder({ commit }: any) {
   try {
@@ -24,7 +24,15 @@ export async function fetchPurchaseOrderById({ commit }: any, id: string) {
     if (error.value) throw error;
 
     if (data.value?.data?.length) {
-      commit("setPurchaseOrderForm", (data.value.data as PurchaseOrder[])[0]);
+      const item = data.value.data as PurchaseOrder[];
+      item.map((po: PurchaseOrder) => {
+        po.vendor = po.vendor?._id ?? null;
+        po.lines.map((line: PurchaseOrderLine) => {
+          line.produk = line.produk?._id ?? null;
+          line.satuan = line.satuan?._id ?? null;
+        });
+      });
+      commit("setPurchaseOrderForm", item[0]);
     }
   } catch (error) {
     showNotify({ name: "[fetchPurchaseOrderById]", type: "Error", error });

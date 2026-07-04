@@ -20,8 +20,8 @@
             hide-bottom-space
             emit-value
             map-options
-            option-value="value"
-            option-label="label"
+            option-value="_id"
+            option-label="name"
             :options="vendorOptions"
             :rules="[(v) => !!v || 'Vendor wajib dipilih']"
           >
@@ -48,7 +48,13 @@
       <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
         <label class="text-bold">Name Vendor</label>
         <span class="custom-input">
-          <q-input :model-value="vendorName" outlined dense hide-bottom-space readonly />
+          <q-input
+            :model-value="vendorName"
+            outlined
+            dense
+            hide-bottom-space
+            readonly
+          />
         </span>
       </div>
 
@@ -143,14 +149,14 @@ const formKeterangan = computed({
 
 const vendorOptions = computed(() =>
   store.getters["vendor/getListVendor"].map((v: any) => ({
-    label: `${v.code} - ${v.name}`,
-    value: v._id,
-  }))
+    name: `${v.code} - ${v.name}`,
+    _id: v._id,
+  })),
 );
 
 const vendorName = computed(() => {
   const vendor = store.getters["vendor/getListVendor"].find(
-    (v: any) => v._id === formVendor.value
+    (v: any) => v._id === formVendor.value,
   );
   return vendor?.name ?? "";
 });

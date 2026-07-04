@@ -3,10 +3,25 @@
     <div class="bg-primary text-white q-pa-sm q-mb-md row items-center">
       <span class="text-bold">Line</span>
       <q-space />
-      <q-btn unelevated color="positive" icon="add" label="Add Row" dense @click="onAddRow" />
+      <q-btn
+        unelevated
+        color="positive"
+        icon="add"
+        label="Add Row"
+        dense
+        @click="onAddRow"
+      />
     </div>
 
-    <q-table flat bordered :rows="rows" :columns="columns" row-key="_index" hide-pagination :rows-per-page-options="[0]">
+    <q-table
+      flat
+      bordered
+      :rows="rows"
+      :columns="columns"
+      row-key="_index"
+      hide-pagination
+      :rows-per-page-options="[0]"
+    >
       <template #body-cell-produk="props">
         <q-td :props="props">
           <q-select
@@ -17,17 +32,21 @@
             hide-bottom-space
             emit-value
             map-options
-            option-value="value"
+            option-value="_id"
             option-label="label"
             :options="produkOptions"
             style="min-width: 160px"
-            @update:model-value="(val) => onUpdateLine(props.row._index, { produk: val })"
+            @update:model-value="
+              (val) => onUpdateLine(props.row._index, { produk: val })
+            "
           >
             <template v-if="!props.row.produk" #selected>
               <div class="text-grey-6">- Pilih Produk -</div>
             </template>
           </q-select>
-          <span v-else>{{ produkCode(props.row.produk) }}</span>
+          <span v-else>
+            {{ produkCode(props.row.produk) }}
+          </span>
         </q-td>
       </template>
 
@@ -49,7 +68,9 @@
             hide-bottom-space
             type="number"
             style="width: 90px"
-            @update:model-value="(val) => onUpdateLine(props.row._index, { qty: Number(val) })"
+            @update:model-value="
+              (val) => onUpdateLine(props.row._index, { qty: Number(val) })
+            "
           />
           <span v-else>{{ props.row.qty }}</span>
         </q-td>
@@ -69,7 +90,9 @@
             option-label="label"
             :options="satuanOptions"
             style="min-width: 140px"
-            @update:model-value="(val) => onUpdateLine(props.row._index, { satuan: val })"
+            @update:model-value="
+              (val) => onUpdateLine(props.row._index, { satuan: val })
+            "
           >
             <template v-if="!props.row.satuan" #selected>
               <div class="text-grey-6">- Pilih Satuan -</div>
@@ -89,7 +112,9 @@
             hide-bottom-space
             type="number"
             style="width: 110px"
-            @update:model-value="(val) => onUpdateLine(props.row._index, { harga: Number(val) })"
+            @update:model-value="
+              (val) => onUpdateLine(props.row._index, { harga: Number(val) })
+            "
           />
           <span v-else>{{ formatCurrency(props.row.harga) }}</span>
         </q-td>
@@ -105,7 +130,9 @@
             hide-bottom-space
             type="number"
             style="width: 110px"
-            @update:model-value="(val) => onUpdateLine(props.row._index, { discount: Number(val) })"
+            @update:model-value="
+              (val) => onUpdateLine(props.row._index, { discount: Number(val) })
+            "
           />
           <span v-else>{{ formatCurrency(props.row.discount) }}</span>
         </q-td>
@@ -124,7 +151,9 @@
             dense
             hide-bottom-space
             style="min-width: 140px"
-            @update:model-value="(val) => onUpdateLine(props.row._index, { keterangan: val })"
+            @update:model-value="
+              (val) => onUpdateLine(props.row._index, { keterangan: val })
+            "
           />
           <span v-else>{{ props.row.keterangan }}</span>
         </q-td>
@@ -140,7 +169,14 @@
             :icon="isEditing(props.row._index) ? 'check' : 'edit'"
             @click="onToggleEdit(props.row._index)"
           />
-          <q-btn flat round dense color="negative" icon="delete" @click="onRemoveRow(props.row._index)" />
+          <q-btn
+            flat
+            round
+            dense
+            color="negative"
+            icon="delete"
+            @click="onRemoveRow(props.row._index)"
+          />
         </q-td>
       </template>
     </q-table>
@@ -160,20 +196,35 @@ const router = useRouter();
 
 const lines = computed(() => store.getters["purchaseOrder/getLines"]);
 const rows = computed(() =>
-  lines.value.map((line: any, index: number) => ({ ...line, _index: index }))
+  lines.value.map((line: any, index: number) => ({ ...line, _index: index })),
 );
 
 const columns = ref([
-  { name: "no", label: "No", field: (row: any) => row._index + 1, align: "center" },
+  {
+    name: "no",
+    label: "No",
+    field: (row: any) => row._index + 1,
+    align: "center",
+  },
   { name: "produk", label: "Kode Produk", field: "produk", align: "left" },
   { name: "namaProduk", label: "Nama Produk", field: "produk", align: "left" },
-  { name: "kategori", label: "Kategori Produk", field: "produk", align: "left" },
+  {
+    name: "kategori",
+    label: "Kategori Produk",
+    field: "produk",
+    align: "left",
+  },
   { name: "qty", label: "QTY", field: "qty", align: "center" },
   { name: "satuan", label: "Satuan", field: "satuan", align: "left" },
   { name: "harga", label: "Harga", field: "harga", align: "right" },
   { name: "discount", label: "Discount", field: "discount", align: "right" },
   { name: "total", label: "Total Harga", field: "total", align: "right" },
-  { name: "keterangan", label: "Keterangan", field: "keterangan", align: "left" },
+  {
+    name: "keterangan",
+    label: "Keterangan",
+    field: "keterangan",
+    align: "left",
+  },
   { name: "action", label: "Action", field: "action", align: "center" },
 ]);
 
@@ -184,14 +235,14 @@ const produkOptions = computed(() =>
   produkList.value.map((p: any) => ({
     label: `${p.code_produk} - ${p.name}`,
     value: p._id,
-  }))
+  })),
 );
 
 const satuanOptions = computed(() =>
   satuanList.value.map((s: any) => ({
     label: `${s.code} - ${s.name}`,
     value: s._id,
-  }))
+  })),
 );
 
 const produkById = (id: string) =>
@@ -214,7 +265,9 @@ const isEditing = (index: number) => editingIndexes.value.includes(index);
 
 const onToggleEdit = (index: number) => {
   if (isEditing(index)) {
-    editingIndexes.value = editingIndexes.value.filter((i: number) => i !== index);
+    editingIndexes.value = editingIndexes.value.filter(
+      (i: number) => i !== index,
+    );
   } else {
     editingIndexes.value = [...editingIndexes.value, index];
   }
