@@ -107,7 +107,7 @@ const rows = ref([]);
 const selected = ref([]);
 const onLoadData = () => {};
 const onCreateData = () => {
-  router.push("/purchasing/order/form-input");
+  router.push("/purchasing/order/add");
 };
 const onEditItem = () => {};
 const onDelete = () => {};
