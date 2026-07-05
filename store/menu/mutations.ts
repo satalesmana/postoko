@@ -22,19 +22,7 @@ const INITIAL_MENU = [
       {
         href: "/purchasing/reception",
         name: "Reception",
-      },
-      {
-        href: "/purchasing/retur",
-        name: "Retur",
-      },
-      {
-        href: "/purchasing/invoice-ap",
-        name: "Invoice AP",
-      },
-      {
-        href: "/purchasing/debt-aging",
-        name: "Debt Aging",
-      },
+      }
     ],
   },
   {

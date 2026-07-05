@@ -10,6 +10,7 @@ export const StockBarangSchema = new Schema({
   harga_beli: { type: Number, default: 0 },
   harga_jual: { type: Number, default: 0 },
   stock: { type: Number, default: 0 },
+  reserved_stock: { type: Number, default: 0 }, // digunakan ketika proses transaksi, 
   satuan: { type: Types.ObjectId, ref: Satuan },
 });
 

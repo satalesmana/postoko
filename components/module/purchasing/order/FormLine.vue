@@ -32,7 +32,7 @@
             hide-bottom-space
             emit-value
             map-options
-            option-value="_id"
+            option-value="value"
             option-label="label"
             :options="produkOptions"
             style="min-width: 160px"
