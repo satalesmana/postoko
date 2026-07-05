@@ -163,7 +163,22 @@ const onEditItem = () => {
   const selectedItem = selected.value[0];
   router.push(`/purchasing/order/edit/${selectedItem._id}`);
 };
-const onDelete = () => {};
+const onDelete = () => {
+  if (selected.value.length === 0) {
+    return;
+  }
+
+  const selectedItem = selected.value.map((item) => item.no).join(", ");
+  Dialog.create({
+    title: "Delete Purchase Order",
+    message: `Are you sure want to delete ${selectedItem}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    await store.dispatch("purchaseOrder/deleteData", selected.value);
+    onLoadData();
+  });
+};
 
 onNuxtReady(() => {
   onLoadData();
